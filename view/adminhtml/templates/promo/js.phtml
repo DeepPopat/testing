@@ -1,0 +1,30 @@
+<style type="text/css">
+    label{
+        width:50px;
+    }
+</style>
+<script>
+require(["jquery", "prototype"], function(jQuery){
+
+    function hideShowSubproductOptions()
+    {
+        if ($('rule_free_shipping').value == 1) {
+            $('rule_cart_price').up('div.field').show();
+            $('rule_cart_price').addClassName('required-entry validate-not-negative-number');
+        } else {
+            $('rule_cart_price').
+                removeClassName('required-entry').
+                removeClassName('validate-not-negative-number').
+                removeClassName('validate-number-range').
+                removeClassName('number-range-0.00-100.00');
+            $('rule_cart_price').up('div.field').hide();
+        }
+
+        return true;
+    }
+
+    jQuery(document).ready(hideShowSubproductOptions);
+    jQuery(document).on('change', '#rule_free_shipping', hideShowSubproductOptions);
+    window.hideShowSubproductOptions = hideShowSubproductOptions;
+});
+</script>

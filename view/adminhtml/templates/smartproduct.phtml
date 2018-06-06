@@ -1,0 +1,357 @@
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+?>
+<div data-level="0" id="show_related" class="fieldset-wrapper admin__collapsible-block-wrapper" style="margin-right: 5%;">
+
+	<div class="fieldset-wrapper-title">
+	    <strong class="admin__collapsible-title">
+            <span>Smart Related Products</span>
+        </strong>
+    </div>
+
+    <div id='content_related' class="admin__fieldset-wrapper-content admin__collapsible-content">
+        <fieldset  class="admin__fieldset">
+        	<?php
+        		$smartRelatedProduct = $block->getRelated();
+			?>
+			<!-- Smart Related Products -->
+			<table class="data-grid data-grid-draggable" id="table1">
+				<thead>
+					<tr>
+						<th class="data-grid-th">
+							<span>ID</span>
+						</th>
+						<th class="data-grid-th">
+							<span>Image</span>
+						</th>
+						<th class="data-grid-th">
+							<span>Name</span>
+						</th>
+						<th class="data-grid-th">
+							<span>Type</span>
+						</th>
+						<th class="data-grid-th">
+							<span>Attrib. Set Name</span>
+						</th>
+							<th class="data-grid-th">
+							<span>Status</span>
+						</th>
+						<th class="data-grid-th">
+							<span>SKU</span>
+						</th>
+							<th class="data-grid-th">
+							<span>Price</span>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+					if($smartRelatedProduct)
+					{
+						$attributeSetModel = $objectManager->create('Magento\Eav\Api\AttributeSetRepositoryInterface');
+
+						foreach($smartRelatedProduct as $data)
+						{
+							if(!empty($data)){
+								$collection = $objectManager->create('Magento\Catalog\Model\Product')->load($data);
+								?>
+								<tr>
+									<td>
+										<?php echo $collection->getId() ?>
+									</td>
+									<td class="_fit">
+										<?php
+										$store = $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore();
+										$imageUrl = $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+										?>
+										<img alt="<?php echo $collection->getName() ?>" src="<?php if($collection->getImage()){ echo $imageUrl.'catalog/product'.$collection->getImage(); }else{ echo $this->getViewFileUrl('Emipro_Smartproductselector::images/small_image.jpg'); } ?>" data-src="<?php echo $collection->getImage() ?>"/>
+									</td>
+									<td>
+										<?php echo $collection->getName() ?>
+									</td>
+									<td>
+										<?php echo $collection->getTypeId() ?>
+									</td>
+									<td>
+										<?php
+											$attributeSetId = $collection->getAttributeSetId();
+											$attributeSetRepository = $attributeSetModel->get($attributeSetId);
+											echo $attributeSetRepository->getAttributeSetName();
+										?>
+									</td>
+									<td>
+										<?php
+											if($collection->getStatus()==1){ echo "Enabled"; }
+											else{ echo "Disabled"; }
+										?>
+									</td>
+									<td>
+										<?php echo $collection->getSku() ?>
+									</td>
+									<td>
+										<?php
+											echo $collection->getPrice();
+										?>
+									</td>
+								</tr>
+								<?php
+							}
+						}
+					}
+					?>
+				</tbody>
+			</table>
+        </fieldset>
+    </div>
+</div>
+
+<!-- Smart Up-Sells Products -->
+<div data-level="0" id="show_upsell" class="fieldset-wrapper admin__collapsible-block-wrapper" style="margin-right: 5%;">
+
+	<div class="fieldset-wrapper-title">
+	    <strong class="admin__collapsible-title">
+            <span>Smart Up-Sells Products</span>
+        </strong>
+    </div>
+
+    <div id='content_upsell' class="admin__fieldset-wrapper-content admin__collapsible-content">
+        <fieldset  class="admin__fieldset">
+			<?php
+				$smartUpsellProduct = $block->getUpsell();
+			?>
+			<table class="data-grid data-grid-draggable" id="table1">
+				<thead>
+					<tr>
+						<th class="data-grid-th">
+							<span>ID</span>
+						</th>
+						<th class="data-grid-th">
+							<span>Image</span>
+						</th>
+						<th class="data-grid-th">
+							<span>Name</span>
+						</th>
+						<th class="data-grid-th">
+							<span>Type</span>
+						</th>
+						<th class="data-grid-th">
+							<span>Attrib. Set Name</span>
+						</th>
+							<th class="data-grid-th">
+							<span>Status</span>
+						</th>
+						<th class="data-grid-th">
+							<span>SKU</span>
+						</th>
+							<th class="data-grid-th">
+							<span>Price</span>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+					if($smartUpsellProduct)
+					{
+						$attributeSetModel = $objectManager->create('Magento\Eav\Api\AttributeSetRepositoryInterface');
+
+						foreach($smartUpsellProduct as $data)
+						{
+							if(!empty($data)){
+
+								$collection = $objectManager->create('Magento\Catalog\Model\Product')->load($data);
+								?>
+								<tr>
+									<td>
+										<?php echo $collection->getId() ?>
+									</td>
+									<td class="_fit">
+										<?php
+										$store = $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore();
+										$imageUrl = $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product' . $collection->getImage();
+										?>
+										<img alt="<?php echo $collection->getName() ?>" src="<?php echo $imageUrl ?>"/>
+									</td>
+									<td>
+										<?php echo $collection->getName() ?>
+									</td>
+									<td>
+										<?php echo $collection->getTypeId() ?>
+									</td>
+									<td>
+										<?php
+											$attributeSetId = $collection->getAttributeSetId();
+											$attributeSetRepository = $attributeSetModel->get($attributeSetId);
+											echo $attributeSetRepository->getAttributeSetName();
+										?>
+									</td>
+									<td>
+										<?php
+											if($collection->getStatus()==1){ echo "Enabled"; }
+											else{ echo "Disabled"; }
+										?>
+									</td>
+									<td>
+										<?php echo $collection->getSku() ?>
+									</td>
+									<td>
+										<?php
+											echo $collection->getPrice();
+										?>
+									</td>
+								</tr>
+								<?php
+							}
+						}
+					}
+					?>
+				</tbody>
+			</table>
+		</fieldset>
+	</div>
+</div>
+
+<!-- Smart Cross-Sells Products -->
+<div data-level="0" id="show_crosssell" class="fieldset-wrapper admin__collapsible-block-wrapper" style="margin-right: 5%;">
+
+	<div class="fieldset-wrapper-title">
+	    <strong class="admin__collapsible-title">
+            <span>Smart Cross-Sells Products</span>
+        </strong>
+    </div>
+
+    <div id='content_crosssell' class="admin__fieldset-wrapper-content admin__collapsible-content">
+        <fieldset  class="admin__fieldset">
+			<?php
+				$smartCrosssellProduct = $block->getCrossell();
+			?>
+			<table class="data-grid data-grid-draggable" id="table1">
+				<thead>
+					<tr>
+						<th class="data-grid-th">
+							<span>ID</span>
+						</th>
+						<th class="data-grid-th">
+							<span>Image</span>
+						</th>
+						<th class="data-grid-th">
+							<span>Name</span>
+						</th>
+						<th class="data-grid-th">
+							<span>Type</span>
+						</th>
+						<th class="data-grid-th">
+							<span>Attrib. Set Name</span>
+						</th>
+							<th class="data-grid-th">
+							<span>Status</span>
+						</th>
+						<th class="data-grid-th">
+							<span>SKU</span>
+						</th>
+							<th class="data-grid-th">
+							<span>Price</span>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+					if($smartCrosssellProduct)
+					{
+						$attributeSetModel = $objectManager->create('Magento\Eav\Api\AttributeSetRepositoryInterface');
+						foreach($smartCrosssellProduct as $data)
+						{
+							if(!empty($data))
+							{
+								$collection = $objectManager->create('Magento\Catalog\Model\Product')->load($data);
+								?>
+								<tr>
+									<td>
+										<?php echo $collection->getId() ?>
+									</td>
+									<td class="_fit">
+										<?php
+										$store = $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore();
+										$imageUrl = $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product' . $collection->getImage();
+										?>
+										<img alt="<?php echo $collection->getName() ?>" src="<?php echo $imageUrl ?>"/>
+									</td>
+									<td>
+										<?php echo $collection->getName() ?>
+									</td>
+									<td>
+										<?php echo $collection->getTypeId() ?>
+									</td>
+									<td>
+										<?php
+											$attributeSetId = $collection->getAttributeSetId();
+											$attributeSetRepository = $attributeSetModel->get($attributeSetId);
+											echo $attributeSetRepository->getAttributeSetName();
+										?>
+									</td>
+									<td>
+										<?php
+											if($collection->getStatus()==1){ echo "Enabled"; }
+											else{ echo "Disabled"; }
+										?>
+									</td>
+									<td>
+										<?php echo $collection->getSku() ?>
+									</td>
+									<td>
+										<?php
+											echo $collection->getPrice();
+										?>
+									</td>
+								</tr>
+								<?php
+							}
+						}
+					}
+					?>
+				</tbody>
+			</table>
+		</fieldset>
+	</div>
+</div>
+
+<script type="text/javascript">
+require(['jquery'], function ($) {
+	jQuery('document').ready(function () {
+		jQuery('#show_related').click(function () {
+			var show_tab = $('#show_related').hasClass('_show');
+			if (show_tab == true) {
+				 $('#show_related').removeClass('_show');
+				 $('#content_related').removeClass('_show');
+			}
+			if (show_tab == false) {
+				 $('#show_related').addClass('_show');
+				 $('#content_related').addClass('_show');
+			}
+		});
+
+		jQuery('#show_upsell').click(function () {
+			var show_tab = $('#show_upsell').hasClass('_show');
+			if (show_tab == true) {
+				 $('#show_upsell').removeClass('_show');
+				 $('#content_upsell').removeClass('_show');
+			}
+			if (show_tab == false) {
+				 $('#show_upsell').addClass('_show');
+				 $('#content_upsell').addClass('_show');
+			}
+		});
+
+		jQuery('#show_crosssell').click(function () {
+			var show_tab = $('#show_crosssell').hasClass('_show');
+			if (show_tab == true) {
+				 $('#show_crosssell').removeClass('_show');
+				 $('#content_crosssell').removeClass('_show');
+			}
+			if (show_tab == false) {
+				 $('#show_crosssell').addClass('_show');
+				 $('#content_crosssell').addClass('_show');
+			}
+		});
+	});
+});
+</script>

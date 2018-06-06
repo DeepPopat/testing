@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
+    <system>
+		<tab id="emipro" translate="label" sortOrder="100"> <!-- ID Must be 'emipro' -->
+			<label>Emipro</label> <!-- Must be Emipro -->
+		</tab>
+		<section id="smartproductselector" translate="label" type="text" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1">
+			<label>Smart Alternative Product Selector</label> <!-- Your extension name -->
+            <tab>emipro</tab>
+            <resource>Emipro_Smartproductselector::config_smartproductselector</resource>
+            <group id="smarproductconfig" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Smart Alternative Product Selector Configuration</label>
+
+                <field id="productCountAdmin" translate="label comment" sortOrder="5" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+	                <label>Quick fetch from database</label>
+	                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>It is recommended to keep this option 'Yes'. By this way, alternative products will be fetched faster in a different way.</comment>
+                </field>
+
+                <field id="displayProduct" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Display Product</label>
+                    <comment>Maximum number of cross-sells products to be shown in cart.</comment>
+                </field>
+            </group>
+		</section>
+	</system>
+</config>
