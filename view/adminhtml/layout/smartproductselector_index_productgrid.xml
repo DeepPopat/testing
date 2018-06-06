@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
-
-    <container name="root" label="Root">
-        <block class="Magento\Framework\View\Element\Template" name="smart_grid" template="Emipro_Smartproductselector::productgrid.phtml" />
-        <block class="Emipro\Smartproductselector\Block\Adminhtml\Grid\Edit\Tab\Productgrid" name="emipro.smartproductselector.edit.tab.productgrid" />
-    </container>
-</layout>

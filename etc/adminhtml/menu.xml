@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
-    <menu>
-        <add id="Emipro_Smartproductselector::view" title="Emipro - Smart Alternative Product Selector" module="Emipro_Smartproductselector" sortOrder="20" parent="Magento_Catalog::catalog" resource="Emipro_Smartproductselector::view"/>
-        <add id="Emipro_Smartproductselector::index" title="Smart Alternative Product Selector" module="Emipro_Smartproductselector" sortOrder="10" parent="Emipro_Smartproductselector::view" action="smartproductselector/index" resource="Emipro_Smartproductselector::index" />
-    </menu>
-</config>
-
