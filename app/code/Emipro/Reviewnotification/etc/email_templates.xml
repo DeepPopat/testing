@@ -1,4 +1,0 @@
-<?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Email/etc/email_templates.xsd">
-<template id="reviewnotification_config_review_notification_template_email" label="Review Notification" file="review_notification_template_email.html" type="html" module="Emipro_Reviewnotification" area="frontend"/>
-</config>
