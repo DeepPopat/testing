@@ -2,7 +2,12 @@
 # Magento Default Files    #
 #--------------------------#
 
-/app/etc/local.xml
+/app/etc/*
+.htaccess
+autoload.php
+bootstrap.php
+functions.php
+
 
 /media/*
 !/media/.htaccess
