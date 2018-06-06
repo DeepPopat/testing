@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
+   <menu>
+
+        <add id="Emipro_Auction::view" title="Real-Time Auction" module="Emipro_Auction" sortOrder="11" resource="Emipro_Auction::view" parent="Magento_Catalog::catalog"/>
+
+        <add id="Emipro_Auction::manage" title="Manage Auctions" module="Emipro_Auction" sortOrder="11" parent="Emipro_Auction::view" action="auction/index/index" resource="Emipro_Auction::manage"/>
+
+    </menu>
+</config>

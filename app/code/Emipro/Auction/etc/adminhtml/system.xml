@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="emipro" translate="label" sortOrder="10">
+            <label>Emipro</label>
+        </tab>
+        <section id="emiproauction" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Auction</label>
+            <tab>emipro</tab>
+            <resource>Emipro_Auction::auction_config</resource>
+            <group id="pusher" translate="label" type="text"  sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Pusher</label>
+                <field id="app_id" translate="label comment" sortOrder="5" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>app_id</label>
+                </field>
+                <field id="key" translate="label comment" sortOrder="10" type="obscure" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>key</label>
+                </field>
+                <field id="secret" translate="label comment" sortOrder="20" type="obscure" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>secret</label>
+                </field>
+                <field id="cluster" translate="label comment" sortOrder="30" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>cluster</label>
+                </field>
+            </group>
+            <group id="emailtemplate" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Email Template</label>
+				<field id="auction_winner_email_template" translate="label" type="select" sortOrder="5" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Auction Winner Email Template</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+				<field id="bid_successful_email_template" translate="label" type="select" sortOrder="10" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Bid Successful Email Template</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+				<field id="raise_bid_email_template" translate="label" type="select" sortOrder="20" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Raise Bid Email Template</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

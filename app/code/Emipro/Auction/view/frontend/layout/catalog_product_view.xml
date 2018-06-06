@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<body>
+
+        <attribute name="class" value="auction-product"/>
+        <referenceContainer name="product.info.main">
+
+          <block class="Emipro\Auction\Block\Auction" name="auction.block.product" as="auction.block.product" after="product.info.price" template="Emipro_Auction::auction.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

@@ -1,0 +1,26 @@
+<!--@subject {{trans "Raise your bid"}} @-->
+{{template config_path="design/email/header_template"}}
+<body style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:14px; margin:0; padding:0;color:#1a1a1a;">
+<div style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:14px; margin:0; padding:0;">
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+	    <table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
+	        <tr class="email-intro" style="background: #FFFFFF;">
+	            <td>
+						<div style="padding: 10px;">
+						<p class="greeting">Hello Bidder, </p>
+						<p>You will be an auction winner. Please raise your bid in <a href="{{var product_url}}" target="_blank">{{var auction_title}}</a>.</p>
+						<br/>
+						Regards,
+						<br/><br/>
+						</div>
+	            </td>
+	        </tr>
+	    </table>
+	</tr>
+</table>
+</div>
+</body>
+{{template config_path="design/email/footer_template"}}
+
+

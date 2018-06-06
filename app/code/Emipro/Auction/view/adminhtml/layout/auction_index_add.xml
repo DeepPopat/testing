@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>
+    <head>
+        <script src="Emipro_Auction::js/getsku.js"/>
+        <css src="Emipro_Auction::css/auctionui.css" />
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <uiComponent name="auction_form"/>
+            <block class="Magento\Framework\View\Element\Template" name="temp" template="Emipro_Auction::skuarray.phtml" before="-" />
+        </referenceContainer>
+    </body>
+</page>

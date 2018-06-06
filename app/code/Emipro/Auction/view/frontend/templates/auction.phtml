@@ -1,0 +1,428 @@
+<?php
+	$currencyCode = $block->getCurrentCurrencyCode();
+	$currencyRate = $block->getCurrentCurrencyRate();
+	$cursymbol = $block->getCurrencySymbol();
+	$helperData = $this->helper('Emipro\Auction\Helper\Data');
+	$currentbid = $block->getCurrentBid();
+	$currentTimeZone = $block->getCurrentTimeZone();
+	$url = $block->getCurrentUrl();
+	$block->getCustomer()->setAfterAuthUrl($url);
+	$time = $block->getTimeZone();
+	$currenttime = date("jS M, Y g:i:s A", strtotime($time));
+	$curr_strtime = strtotime($time);
+	$watchlistdata =$block->getCustomerWatchlistData();
+	$product = $block->getCurrentProductCollection();
+   	$prourl =$product->getProductUrl();
+    $produtid = $product->getId();
+    $productsku = $product->getSku();
+   	$auction = $block->getAuctionData()->getCollection();
+	$customerid =$block->getCustomer()->getCustomerId();
+	$auction_title = '';
+	/**
+	 * Changes RH [29-5-2018] : Timezone offset get dynamically by timezone name
+	 */
+	$basic_timezone = new DateTimeZone($currentTimeZone);
+	$timezone_value_by_name = new DateTime('now', $basic_timezone);
+	$timezone_value = ($basic_timezone->getOffset($timezone_value_by_name) / 3600);
+	/**
+	 * Changes RH End [29-5-2018] : Timezone offset get dynamically by timezone name
+	 */
+	if ($auction):
+	foreach ($auction as $value):
+		$auctionproductid =$value->getProductId();
+		if($auctionproductid == $produtid) :
+		$minbidamount =$value->getMinPriceGap();
+		$endtime = $value->getEndTime();
+		$utcendtime= date("jS M, Y g:i:s A", strtotime($endtime));
+		$end_strtime = strtotime($endtime);
+
+		$auction_title =$value->getTitle();
+		$auctstarttime = date("jS M, Y g:i:s A", strtotime($value->getStartTime()));
+		$timeleft = strtotime($value->getEndTime())-strtotime($time);
+		$timetostart = strtotime($value->getStartTime()) - strtotime($time);
+?>
+<div class="ept-auction-block">
+	<div class="ept-auction-main-title"><?php echo $auction_title; ?></div>
+	<?php
+	 if ($timetostart > 0):
+            echo "<div class='auction-start-at-div'>".__('Auction start at ')."<strong>" . date("jS M, Y g:i:s A", strtotime($value->getStartTime())) . "</strong>" . " " . "<span class='auction-start-timezone'> [" . $this->_scopeConfig->getValue('general/locale/timezone',\Magento\Store\Model\ScopeInterface::SCOPE_STORE) . "]</span></div></div>";
+     else:
+
+    if ($timeleft > 0):
+	?>
+	<div class="ept-auction-container">
+		<div class="ept-auction-sub-container">
+			<div class="ept-auction-left-time-block">
+				<div class="ept-auction-title-block">
+					<span><?php echo __('Time left:') ?></span>
+				</div>
+				<div class="ept-auction-content-block">
+					<div id="ept-timer">
+						<li>
+							<div id="ept-timer-day" class="ept-background"></div><span class="ept-timer-name">Day</span>
+						</li>
+						<li>
+							<div class="ept-background" id="ept-timer-hour"></div><span class="ept-timer-name">Hour</span>
+						</li>
+						<li>
+							<div class="ept-background" id="ept-timer-minute"></div><span class="ept-timer-name">Min</span>
+						</li>
+						<li>
+							<div class="ept-background" id="ept-timer-second"></div><span class="ept-timer-name">Sec</span>
+						</li>
+					</div>
+				<input type="hidden" id="end-timer-time" value="<?php echo $endtime; ?>">
+				<script type="text/javascript">
+				/**
+				 * Changes RH [29-5-2018] : change whole countdown js as per timezone
+				 */
+				require([ 'jquery'],  function( $ ) {
+					var timeinterval = setInterval(function() {
+					var base_time = new Date();
+					var timezone_offset = "<?php echo $timezone_value; ?>";
+					var localTime = base_time.getTime();
+					var localOffset = base_time.getTimezoneOffset() * 60000;
+					var utc = localTime + localOffset;
+					var currenttime = utc + (3600000*timezone_offset);
+					var endtime_value = $("#end-timer-time").val();
+					var end = new Date(endtime_value);
+					var endtime =  end.getTime();
+					var autendtm = endtime - currenttime;
+					var days = Math.floor(autendtm / (1000 * 60 * 60 * 24));
+				    var hours = Math.floor((autendtm % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+				    var minutes = Math.floor((autendtm % (1000 * 60 * 60)) / (1000 * 60));
+				    var seconds = Math.floor((autendtm % (1000 * 60)) / 1000);
+				    if (autendtm < 0) {
+				        clearInterval(timeinterval);
+				        window.location.reload();
+				    }
+				     document.getElementById("ept-timer-day").innerHTML = days;
+				     document.getElementById("ept-timer-hour").innerHTML = hours;
+				     document.getElementById("ept-timer-minute").innerHTML = minutes;
+				     document.getElementById("ept-timer-second").innerHTML = seconds;
+
+					}, 1000);
+				});
+				/**
+				 * Changes RH End [29-5-2018] : change whole countdown js as per timezone
+				 */
+				</script>
+				</div>
+
+			</div>
+		</div>
+		<div class="ept-auction-sub-container ept-add-extend-time">
+			<div class="ept-auction-close-time-block">
+				<div class="ept-auction-title-block">
+					<span><?php echo __('Close Time:') ?></span>
+				</div>
+				<div class="ept-auction-content-block">
+					<span><?php
+					echo date("jS M, Y g:i:s A", strtotime($endtime));
+					echo ' ';
+					echo '['.$currentTimeZone.']';
+				?></span>
+				</div>
+			</div>
+		</div>
+		<div class="ept-auction-sub-container ept-add-current-blink">
+			<div class="ept-auction-current-price-block">
+				<div class="ept-auction-title-block">
+					<span><?php echo __('Current Bid:') ?></span>
+				</div>
+				<div class="ept-auction-content-block">
+					<?php $bidamount = $currentbid->addFieldToFilter('auction_id',$value->getAuctionId())->getLastItem()->getBidAmount(); ?>
+					<?php $bidid = $currentbid->addFieldToFilter('auction_id',$value->getAuctionId()); ?>
+					<span><?php if(count($bidamount)){ echo $cursymbol.$helperData->convertPrice($bidamount)." (".count($bidid)." bids)"; }else { echo __("Not Available"); }  ?></span>
+				</div>
+			</div>
+		</div>
+		<div class="ept-auction-sub-container">
+			<div class="ept-auction-start-price-block">
+				<div class="ept-auction-title-block">
+					<span><?php echo __('Start Price:') ?></span>
+				</div>
+				<div class="ept-auction-content-block">
+					<span><?php echo $cursymbol.$helperData->convertPrice($value->getMinPrice()); ?></span>
+				</div>
+			</div>
+		</div>
+		<?php
+		if($customerid !=""):
+			$currentbid->addFieldToFilter('customer_id',$customerid);
+			$currentbid->clear();
+			$mylastbid =$currentbid->getLastItem()->getBidAmount();
+			?>
+			<div class="ept-auction-sub-container ept-add-my-bid-blink">
+			<div class="ept-auction-my-bid-block">
+				<div class="ept-auction-title-block">
+					<span><?php echo __('My Bid:') ?></span>
+				</div>
+				<div class="ept-auction-content-block">
+					<span><?php if($mylastbid){ echo $cursymbol.$helperData->convertPrice($mylastbid); }else{ echo __("Not  Available"); } ?></span>
+				</div>
+			</div>
+		</div>
+		<?php
+			$Watchlistproid=[];
+	 		$watchlistcoll = $watchlistdata->addFieldToFilter('customer_id',$customerid);
+	 		if(count($watchlistcoll)):
+	 		foreach ($watchlistcoll as  $watchidresult) {
+	 			$Watchlistproid[] = $watchidresult->getWatchList();
+	 		}
+			endif;?>
+		<div class="ept-watchlist"><img title="Add To WatchList" src="<?php echo $this->getViewFileUrl('Emipro_Auction/images/eyeicon.png'); ?>" />
+			<a><?php if(in_array($produtid, $Watchlistproid)): echo __("Remove From WatchList"); else: echo __("Add To WatchList");  endif;?></a></div>
+		<?php endif; ?>
+
+		<div class="bid-form">
+
+		<div class="ept-auction-sub-container">
+			<div class="ept-auction-button-block">
+				<div class="ept-auction-title-block">
+					<input type="hidden" name="customer_id" id="customer_id" value="<?php echo $customerid; ?>" />
+					<input type="hidden" name="auction_id" id="auction_id" value="<?php echo $value->getAuctionId();  ?>" />
+					<input type="hidden" name="auction_product_sku" id="auction_product_sku" value="<?php echo $productsku; ?>" />
+					<input type="text" name="cursymbol" id="cursymbol" value="<?php echo $cursymbol; ?>" autocomplete="off" disabled/>
+					<input type="text" name="bid_amount" id="bid_amount" value="<?php if(count($bidamount)) {echo $helperData->convertPrice($bidamount+$minbidamount); }else{ echo $helperData->convertPrice($value->getMinPrice()+$minbidamount);} ?>" autocomplete="off" />
+
+
+				</div>
+				<div class="ept-auction-content-block">
+					<button type="submit"  class="auction-bidnow-button action primary"><?php echo __('Bid'); ?></button>
+				</div>
+			</div>
+		</div>
+		</div>
+		<div class="ept-min-bid-note"><?php echo __('Your bid must be equal or greater than '); ?><span><?php if(count($bidamount)) {echo $cursymbol.$helperData->convertPrice($bidamount+$minbidamount); }else{ echo $cursymbol.$helperData->convertPrice($value->getMinPrice()+$minbidamount);} ?></span></div>
+			<div class="ept-auction-msg"><?php if($customerid == ""){
+			 echo __("Please <a href=".$this->geturl('customer/account/login/', ['referer' => base64_encode($url)]).">login</a> / <a href=".$this-> geturl('customer/account/create/', ['referer' => base64_encode($url)])."'>register</a> before place bid.");
+			 } ?></div>
+
+	</div>
+	<?php else:
+	$bidamount = $currentbid->addFieldToFilter('auction_id',$value->getAuctionId())->getLastItem()->getBidAmount();
+	if ($bidamount >= $value->getReservedPrice()):
+
+			$winnnerid =  $block->getWinnerId($value->getId());
+		    $winnername = $block->getWinner($value->getId());
+
+			if($winnnerid):
+			?>
+			<?php if($winnnerid == $customerid): ?>
+				<div class="ept-auction-winner-class"><?php echo __("Congratulation !! you are the winner of the auction."); ?></div>
+				<div class="ept-winner-addto-cart"></div>
+			<?php else: ?>
+				<div class="ept-auction-winner-class"><?php echo "<span>".$winnername."</span>".__(" is a winner of this auction."); ?></div>
+			<?php endif; else: ?>
+			<div class="ept-auction-winner-class"><?php echo __("Auction of this product is now ended. Winner will be declared soon."); ?></div>
+	<?php endif; ?>
+	<?php else: ?>
+		<div class="ept-auction-winner-class"><?php echo __("The closing price is lower than the reserve price, so there is no winner."); ?></div>
+	<?php endif;endif; ?>
+</div>
+<?php endif; endif; endforeach; endif; ?>
+<script type="text/javascript">
+	require([ 'jquery','pusher'],  function( $ ) {
+		$(document).ready(function(){
+			var currencysymbol = '<?php echo $cursymbol; ?>';
+			$('#bid_amount').keypress(function(event) {
+			    var $this = $(this);
+			    if ((event.which != 46 || $this.val().indexOf('.') != -1) &&
+			       ((event.which < 48 || event.which > 57) &&
+			       (event.which != 0 && event.which != 8))) {
+			           event.preventDefault();
+			    }
+			    var text = $(this).val();
+			    if ((event.which == 46) && (text.indexOf('.') == -1)) {
+			        setTimeout(function() {
+			            if ($this.val().substring($this.val().indexOf('.')).length > 3) {
+			                $this.val($this.val().substring(0, $this.val().indexOf('.') + 3));
+			            }
+			        }, 1);
+			    }
+			    if ((text.indexOf('.') != -1) &&
+			        (text.substring(text.indexOf('.')).length > 2) &&
+			        (event.which != 0 && event.which != 8) &&
+			        ($(this)[0].selectionStart >= text.length - 2)) {
+			            event.preventDefault();
+			    }
+			});
+			$('#bid_amount').bind("paste", function(e) {
+			var text = e.originalEvent.clipboardData.getData('Text');
+			if ($.isNumeric(text)) {
+			    if ((text.substring(text.indexOf('.')).length > 3) && (text.indexOf('.') > -1)) {
+			        e.preventDefault();
+			        $(this).val(text.substring(0, text.indexOf('.') + 3));
+			   }
+			}
+			else {
+			        e.preventDefault();
+			     }
+			});
+			if($(".ept-auction-block").length)
+			{
+				if($(".ept-winner-addto-cart").length)
+				{
+					$(".product-reviews-summary, .product-info-price, .product-social-links").remove();
+				}else{
+					$(".product-reviews-summary, .product-info-price, .product-add-form, .product-social-links").remove();
+				}
+			}
+			var auction_title = "<?php echo $auction_title; ?>";
+			var prourl = "<?php echo $prourl; ?>";
+			var product_id = "<?php echo $produtid; ?>";
+			var auction_id= $(".bid-form").find("#auction_id").val();
+			var customer_id = $(".bid-form").find("#customer_id").val();
+
+
+			$('#bid_amount').keypress(function (e) {
+			 var key = e.which;
+			 if(key == 13)  // the enter key code
+			  {
+			    $('.auction-bidnow-button').click();
+			  }
+			});
+			$('.auction-bidnow-button').click(function(event){
+				$(".ept-auction-msg").removeClass("ept-auction-msg-success-symbol");
+				$(".ept-auction-msg").removeClass("ept-auction-msg-error-symbol");
+				var bid_amount = $('.bid-form').find('#bid_amount').val();
+				var auction_product_sku = $(".bid-form").find("#auction_product_sku").val();
+				var url = "<?php echo $this->getUrl("auction/index/auctionsave"); ?>";
+				var email_send_url = "<?php echo $this->getUrl("auction/index/sendemailtobidder"); ?>";
+				$("ept-auction-msg-success-symbol").remove();
+				$("ept-auction-msg-error-symbol").remove();
+
+				$.ajax({
+					url: url,
+					type: "POST",
+					data: {auction_id:auction_id,customer_id:customer_id,bid_amount:bid_amount,auction_product_sku:auction_product_sku},
+					beforeSend: function() {
+						$(".ept-auction-msg").css("background","#E5EFE5");
+						$(".ept-auction-msg").css("color","#006400");
+						$(".ept-auction-msg").html("Please Wait...!");
+						$(".ept-auction-msg").fadeIn();
+					},
+					success: function(data){
+						var obj = jQuery.parseJSON(data);
+
+					if(obj.status == "error")
+					{
+						$(".ept-auction-msg").html(obj.msg);
+						$(".ept-auction-msg").css("background","#FAE5E5");
+						$(".ept-auction-msg").css("color","#B30000");
+						$(".ept-auction-msg").addClass("ept-auction-msg-error-symbol");
+					}
+					else
+					{
+						$(".ept-auction-msg").html(obj.msg);
+						$(".ept-auction-msg").addClass("ept-auction-msg-success-symbol");
+						if(obj.pusher_status == 'no')
+						{
+							changeData(obj);
+						}
+						var customer_id_for_raisebid_template = obj.customer_id_for_raisebid_template;
+						sendEmailToBidder(email_send_url,currencysymbol,customer_id_for_raisebid_template,auction_id,bid_amount,customer_id,auction_title,prourl);
+					}
+					}
+				});
+			});
+			$('.ept-watchlist').click(function(){
+				$(".ept-auction-msg").removeClass("ept-auction-msg-error-symbol");
+				$(".ept-auction-msg").removeClass("ept-auction-msg-success-symbol");
+				var watchlisturl = "<?php echo $this->getUrl("auction/index/watchlistsave"); ?>";
+				$.ajax({
+					url: watchlisturl,
+					type: "POST",
+					data: {auction_id:auction_id,customer_id:customer_id,product_id:product_id},
+					beforeSend: function() {
+						$(".ept-auction-msg").html("Please Wait...!");
+						$(".ept-auction-msg").css("background","#E5EFE5");
+						$(".ept-auction-msg").css("color","#006400");
+
+					},
+					success: function(data){
+						var result = jQuery.parseJSON(data);
+						if(result.status == "Add to watchlist")
+						{
+							$(".ept-auction-msg").html(result.msg);
+							$(".ept-watchlist a").text("Remove From WatchList");
+						} else {
+
+							$(".ept-auction-msg").html(result.msg);
+							$(".ept-watchlist a").text("Add To WatchList");
+						}
+						$(".ept-auction-msg").addClass("ept-auction-msg-success-symbol");
+						$(".ept-auction-msg").css("background","#E5EFE5");
+						$(".ept-auction-msg").css("color","#006400");
+					}
+				});
+			});
+			function changeData(data){
+				var customerid = '<?php echo $customerid; ?>'
+				var time = '<?php echo $time; ?>';
+
+				var bididinc = " ("+(parseInt(data.bid_count))+"bids)";
+				var mybidval = currencysymbol+convertBidPrice(data.bid_amount)+bididinc;
+				var currentbid = currencysymbol+convertBidPrice(data.bid_amount);
+				var bidval = convertBidPrice(parseFloat(data.bid_amount)+parseFloat(data.min_bid_amount));
+				if(customerid == data.customer_id)
+				{
+					$(".ept-auction-my-bid-block .ept-auction-content-block span").text('');
+					$(".ept-auction-my-bid-block .ept-auction-content-block span").text(currentbid);
+					$(".ept-add-my-bid-blink").addClass("ept-blink-class");
+				}
+				$(".ept-auction-current-price-block .ept-auction-content-block span").text('');
+				$(".ept-auction-current-price-block .ept-auction-content-block span").text(mybidval);
+				$(".ept-add-current-blink").addClass("ept-blink-class");
+
+				$(".ept-add-current-blink").addClass("ept-blink-class");
+				$("#bid_amount").attr('value',bidval);
+				$(".ept-min-bid-note span").text(currencysymbol+bidval);
+				if(data.auction_new_end_time != undefined){
+					$("#end-timer-time").attr('value',data.auction_new_end_time);
+					$(".ept-add-extend-time").addClass("ept-blink-class");
+				}
+				setTimeout(function(){
+					$(".ept-add-current-blink").removeClass("ept-blink-class");
+					$(".ept-add-my-bid-blink").removeClass("ept-blink-class");
+					$(".ept-add-extend-time").removeClass("ept-blink-class");
+				},5000);
+
+			}
+			function sendEmailToBidder(email_send_url,currencysymbol,customer_id_for_raisebid_template,auction_id,bid_amount,customer_id,auction_title,prourl){
+				jQuery.ajax({
+					url: email_send_url,
+					type: "POST",
+					data: {auction_id:auction_id,currencysymbol:currencysymbol,bid_amount:bid_amount,customer_id_for_raisebid_template:customer_id_for_raisebid_template,customer_id:customer_id,auction_title:auction_title,prourl:prourl}
+				});
+			}
+			function convertBidPrice(amtVal)
+			{
+				var currency_rate = "<?php echo $currencyRate; ?>";
+				var bid_price = amtVal * currency_rate;
+		        return bid_price.toFixed(2);
+			}
+
+		<?php
+		$_pusherChannel=str_replace(" ","-",$productsku);
+		?>
+
+        var pusher = new Pusher('<?php echo  $this->_scopeConfig->getValue('emiproauction/pusher/key',\Magento\Store\Model\ScopeInterface::SCOPE_STORE); ?>', {
+		      cluster: '<?php echo  $this->_scopeConfig->getValue('emiproauction/pusher/cluster',\Magento\Store\Model\ScopeInterface::SCOPE_STORE); ?>',
+		      encrypted: true
+		    });
+        var channel = pusher.subscribe('<?php echo $_pusherChannel; ?>');
+        channel.bind('<?php echo $_pusherChannel; ?>', function(data) {
+            changeData(data);
+        	});
+		});
+	});
+
+</script>
+
+
+
+
+
+

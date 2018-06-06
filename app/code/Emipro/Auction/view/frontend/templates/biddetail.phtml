@@ -1,0 +1,54 @@
+<?php
+/**
+  *Create a biddetail page in my account section.
+  *Show all details of auction bids.
+  *$block Emipro\Auction\Block\BidDetails
+*/
+?>
+<?php
+ $customerid =$block->getCustomer()->getCustomerId();
+ $cursymbol = $block->getCurrencySymbol();
+ $helperData = $this->helper('Emipro\Auction\Helper\Data');
+ $auctionid = $this->getRequest()->getParam('auction_id');
+ $bidmodel = $block->getBidmodel();
+ $currentbidamount = $bidmodel->addFieldToFilter('auction_id',$auctionid)->getLastItem()->getBidAmount();
+ $bidid = $bidmodel->addFieldToFilter('auction_id',$auctionid);
+ if ($block->displayBid()) {
+ 	$bidcoll = $block->displayBid();
+ }
+$mylastbid = $this->bidFactory->create()->getCollection()->addFieldToFilter('auction_id',$auctionid)->addFieldToFilter('customer_id',$customerid)->getLastItem()->getBidAmount();
+
+?>
+ <div class="ept-bid-detail-block">
+ 	<div class="ept-bid-detail-sub-block">
+		<div class="ept-bid-count-block"><b><?php echo __('Total Bid : '); ?></b><span><?php if($bidid): echo count($bidid); else: echo __('Not Available'); endif; ?></span></div>
+		<div class="ept-current-bid-block"><b><?php echo __('Current Bid : ') ?></b><span><?php if($currentbidamount): echo $cursymbol.$helperData->convertPrice($currentbidamount); else: echo __('Not Available'); endif; ?></div>
+		<div class="ept-my-bid-block"><b><?php echo __('My Bid : ') ?></b><span><?php if($mylastbid): echo $cursymbol.$helperData->convertPrice($mylastbid); else: echo __('Not Available'); endif;?></span></div>
+	</div>
+	<?php
+	/**
+	  *Show a biddetail table.
+	*/
+	?>
+	<?php if($bidcoll && count($bidcoll)): ?>
+	<table class="ept-bid-detail-table">
+		<thead>
+			<th><?php echo __('BID DATE'); ?></th>
+			<th><?php echo __('BID AMOUNT'); ?></th>
+		</thead>
+		<?php foreach ($bidcoll as $value): ?>
+			<tr>
+				<td><?php echo $value->getCreatedTime(); ?></td>
+				<td style="text-align: right;"><?php echo $cursymbol.$helperData->convertPrice($value->getBidAmount()); ?></td>
+			</tr>
+		<?php endforeach; ?>
+	</table>
+	<?php if ($block->getPagerHtml()): ?>
+        <div class="order-products-toolbar toolbar bottom custom-pager"><?php echo $block->getPagerHtml(); ?></div>
+    <?php endif ?>
+<?php else: ?>
+	<br/>
+	<br>
+	<div class="message info empty" ><span><?php echo __('You have not placed any bid.'); ?></span></div>
+<?php endif;?>
+</div>

@@ -1,0 +1,76 @@
+<?php
+/**
+  *Create a "Auction Watchlist" tab in my account section.
+  *Show all details of Watchlist product.
+  *$block Emipro\Auction\Block\Watchlist
+*/
+?>
+<?php
+	$customerid =$block->getCustomer()->getCustomerId();
+	if ($block->displayWatch()) {
+		$watchlistmodel = $block->displayWatch();
+	}
+	$cursymbol = $block->getCurrencySymbol();
+	$helperData = $this->helper('Emipro\Auction\Helper\Data');
+?>
+<?php
+/**
+  *Show WatchList ptoduct content in table.
+*/
+?>
+<?php if($watchlistmodel && count($watchlistmodel)): ?>
+	<table class="ept-watchlist-table">
+		<thead>
+			<th><?php echo __('TITLE'); ?></th>
+			<th><?php echo __('TOTAL BID'); ?></th>
+			<th><?php echo __('START TIME'); ?></th>
+			<th><?php echo __('END TIME'); ?></th>
+			<th><?php echo __('STARTING PRICE'); ?></th>
+			<th><?php echo __('LAST BID'); ?></th>
+			<th><?php echo __('STATUS'); ?></th>
+		</thead>
+				<?php foreach ($watchlistmodel as $watchlistresult):
+					$watchproid = $watchlistresult->getWatchList();
+					$auction = $block->getAuctionData()->getCollection()->addFieldToFilter('product_id',$watchproid)->getFirstItem();
+					if($auction->getData()):
+					$auctionid = $auction->getAuctionId();
+					$bidmodel =  $this->bidFactory->create()->getCollection()->addFieldToFilter('auction_id',$auctionid);
+					$lastbid = $bidmodel->getLastItem()->getBidAmount();
+					$prourl =$block->getProduct($watchproid)->getProductUrl();
+
+				?><tr>
+					<td><a href="<?php echo $prourl; ?>"><?php echo $auction->getTitle(); ?></a></td>
+					<td><?php echo count($bidmodel); ?></td>
+					<td><?php echo $auction->getStartTime(); ?></td>
+					<td><?php echo $auction->getEndTime(); ?></td>
+					<td style="text-align: right;"><?php echo $cursymbol.$helperData->convertPrice($auction->getMinPrice()); ?></td>
+					<td style="text-align: right;">
+					<?php if(empty($lastbid)){ echo __("Not Available");} else{ echo $cursymbol.$helperData->convertPrice($lastbid);} ?></td>
+					<td><?php
+							$auction_status="-";
+							$now = $block->getTimeZone();
+							$start_date=new DateTime($auction->getStartTime());
+							$end_date=new DateTime($auction->getEndTime());
+							if(($start_date <= new DateTime($now)) && ($end_date >= new DateTime($now)))
+							{
+								$auction_status=__("Continue");
+							}
+							elseif($start_date > new DateTime($now))
+							{
+								$auction_status=__("Not Started");
+							}
+							elseif($end_date < new DateTime($now))
+							{
+								$auction_status=__("Complete");
+						} echo $auction_status;  ?>
+					</td>
+				</tr>
+		<?php endif; endforeach; ?>
+	</table>
+	<?php if ($block->getPagerHtml()): ?>
+        <div class="order-products-toolbar toolbar bottom custom-pager"><?php echo $block->getPagerHtml(); ?></div>
+    <?php endif ?>
+<?php else: ?>
+	<div class="message info empty" ><span><?php echo __('You have not added any auction in watchlist yet.'); ?></span></div>
+<?php endif; ?>
+

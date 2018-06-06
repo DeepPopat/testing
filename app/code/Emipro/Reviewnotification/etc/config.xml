@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <reviewnotification>
+            <config>
+                <display_notification>1</display_notification>
+            </config>
+        </reviewnotification>
+        <reviewnotification>
+            <config>
+                <email_notification>1</email_notification>
+            </config>
+        </reviewnotification>
+        <reviewnotification>
+            <config>
+                <review_notification_template_email>reviewnotification_config_review_notification_template_email</review_notification_template_email>
+            </config>
+        </reviewnotification>
+        <reviewnotification>
+            <config>
+                <identity>general</identity>
+            </config>
+        </reviewnotification>
+    </default>
+</config>

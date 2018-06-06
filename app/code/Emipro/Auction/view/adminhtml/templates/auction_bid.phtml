@@ -1,0 +1,19 @@
+<?php
+$blockGrid = $block->getBlockGrid();
+$gridJsObjectName = $blockGrid->getJsObjectName();
+?>
+<?php  echo $block->getGridHtml(); ?>
+<input type="hidden" name="category_products" id="in_category_products" data-form-part="auction_edit_form" value="" />
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Emipro_Auction/js/display-grid": {
+                "selectedProducts": <?php  echo $block->getAttachmentJson(); ?>,
+                "gridJsObjectName": <?php  echo '"' . $gridJsObjectName . '"' ?: '{}'; ?>
+            }
+        }
+    }
+</script>
+<script>
+    require('mage/apply/main').apply();
+</script>

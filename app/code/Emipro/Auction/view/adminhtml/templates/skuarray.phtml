@@ -1,0 +1,28 @@
+<?php
+$objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
+$proids = [];
+$auctionModel = $objectManager->create('\Emipro\Auction\Model\Auction')->getCollection();
+foreach ($auctionModel as $value) {
+	$proids[] = $value->getProductId();
+}
+$productCollectionFactory = $objectManager->create('\Magento\Catalog\Model\Product')->getCollection();
+$productCollectionFactory->addAttributeToSelect('*');
+$productCollectionFactory->addAttributeToFilter('type_id', \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE);
+$productCollectionFactory->addAttributeToFilter('visibility' , \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH);
+if (count($proids)) {
+	$productCollectionFactory->addFieldToFilter('entity_id', array('nin' => $proids));
+}
+
+
+?>
+<script type="text/javascript">
+var availableTags = [
+<?php
+foreach ($productCollectionFactory as $product) {
+	$my_string = $product->getName();
+	$str = str_replace("'", "",$my_string);
+	echo "'".$str." [sku:".$product->getSku()."]',";
+}
+?>
+];
+</script>

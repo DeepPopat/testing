@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Email/etc/email_templates.xsd">
+<template id="emiproauction_emailtemplate_auction_winner_email_template" label="Auction Winner email" file="auction_winner_email_template.html" type="html" module="Emipro_Auction" area="frontend"/>
+<template id="emiproauction_emailtemplate_bid_successful_email_template" label="Bid Successful email" file="bid_successful_email_template.html" type="html" module="Emipro_Auction" area="frontend"/>
+<template id="emiproauction_emailtemplate_raise_bid_email_template" label="Raise Bid email" file="raise_bid_email_template.html" type="html" module="Emipro_Auction" area="frontend"/>
+</config>

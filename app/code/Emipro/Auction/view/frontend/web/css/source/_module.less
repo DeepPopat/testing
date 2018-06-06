@@ -1,0 +1,65 @@
+.ept-background{background: #000;color: #fff;padding: 0px 8px;margin: 0 3px 0 3px;font-size: 16px;
+border-radius: 3px}
+#ept-timer li{list-style: none;display: inline-block;text-align: center}
+.ept-timer-name{font-size: 11px;color: grey}
+.custom-pager{display: block !important;margin-top: 5%;}
+.ept-view-winner {visibility: hidden}
+.ept-view-winner button {display: none;margin-bottom: 10px;margin-top: 5px}
+.products .product-item:hover .ept-view-winner{visibility:visible;text-align: center}
+.ept-bid-detail-sub-block {padding-left: 10px;font-size: 16px}
+table.ept-bid-detail-table {margin-top: 30px}
+.ept-auction-winner-class {padding: 10px;text-align: center;font-size: 16px;background: #E5EFE5;color: #006400}
+.ept-auction-winner-class span {font-weight: bold;text-transform: uppercase;}
+.ept-watchlist-table thead,.ept-mybid-table thead,.ept-bid-detail-table thead{border-bottom: 1px solid #ccc}
+.ept-watchlist-table tbody tr,.ept-mybid-table tbody tr,.ept-bid-detail-table tbody tr{border-bottom: 1px solid #e6e6e6}
+.ept-bid-detail-table{width:40%;}
+.ept-auction-block .ept-watchlist {cursor: pointer;display: inline-block;}
+.ept-auction-block .ept-watchlist a:hover{text-decoration: none}
+.ept-auction-main-title {text-align: center;font-size: 18px;font-weight: 600;padding: 10px 0 10px 0}
+.ept-auction-sub-container {width: 100%;clear: both;line-height: 2;display: inline-table}
+.ept-auction-title-block {width: 39%;float: left;font-size: 15px;font-weight: 600;padding-left: 7px;}
+.ept-auction-content-block {float: right;width: 58%}
+.ept-auction-block {border: 1px solid #ccc;display: inline-table;width: 100%;margin: 15px 0;border-top: 4px solid #1979c3;}
+.ept-auction-container,.auction-start-at-div {padding: 10px 15px 10px 15px;border-top: 1px solid #ccc}
+.ept-auction-button-block .ept-auction-title-block input {width: 70%}
+.ept-auction-button-block .ept-auction-content-block button {min-width: 100px}
+.ept-min-bid-note {font-size: 12px;line-height: 1.43;color: green;width: 100%;margin-top: 5px;margin-bottom: 10px;font-weight: 600;padding-left:7px}
+.ept-auction-timer {height: 50px;margin-top: 7px}
+#cursymbol{width: 20px;float: left;text-align: left;padding: 0 0 0 6px;color: #000}
+.ept-auction-block .ept-auction-msg {padding:5px}
+.ept-auction-block .ept-watchlist img {width: 24px;float: left;margin-right: 5px;height: 24px;margin-bottom: 5px;padding-left:7px}
+.ept-auction-block .ept-auction-msg.ept-auction-msg-success-symbol::before {
+    -webkit-font-smoothing: antialiased;font-size: 24px;line-height: 24px;color: #006400;
+    content: '\e60e';font-family: 'luma-icons';margin: -12px 0 0;vertical-align: middle;display: inline-block;
+    font-weight: normal;overflow: hidden;speak: none;left: -5px;width: 45px;text-align: center;position: relative;
+    top: 5.5px}
+.ept-auction-block .ept-auction-msg.ept-auction-msg-error-symbol::before{
+    -webkit-font-smoothing: antialiased;font-size: 24px;line-height: 24px;color: #b30000;content: '\e61f';
+    font-family: 'luma-icons';margin: -12px 0 0;vertical-align: middle;display: inline-block;
+    font-weight: normal;overflow: hidden;speak: none;left: 0;top: 5.5px;width: 45px;position: relative;text-align: center}
+
+
+/* change style for all */
+.products .product-item .ept-auction-list-block .auction_timer_list {
+    background: #eee;
+    padding: 15px;
+    padding-bottom: 0;
+    border: 1px solid #d1d1d1;
+    border-left: 3px solid #000;
+    margin-bottom: 10px;
+}
+.ept-auction-list-block .bid_button button {min-width: 100px;border-radius: 0;text-align: center;margin-bottom: 10px;}
+.products .product-item .ept-auction-list-block .bid_button {clear: both;visibility: hidden}
+.products .product-item:hover .ept-auction-list-block .bid_button{visibility:visible;text-align: center}
+.ept-blink-class {background: #F9B841CC;height: 30px;font-weight: 600}
+
+ @media only screen and (max-width: (@screen__m)) {
+ .ept-mybid-table thead,.ept-watchlist-table thead{width: 44%;float: left}
+.ept-mybid-table tbody,.ept-watchlist-table tbody {width: 56%;float: right}
+.ept-mybid-table > thead > tr > th,.ept-mybid-table tbody > tr > td,
+.ept-watchlist-table > thead > tr > th,.ept-watchlist-table  tbody > tr > td{width: 100%;float: left}
+
+}
+@media only screen and (max-width: (@screen__xs)) {
+.ept-background{font-size:13px;}
+}

@@ -1,0 +1,65 @@
+<?php
+/**
+  *Create a "My Bid" tab in my account section.
+  *Show all details of my bid.
+  *$block Emipro\Auction\Block\Mybid
+*/
+?>
+<?php
+if ($block->displayCollection()) {
+	$auctionmodel = $block->displayCollection();
+}
+$cursymbol = $block->getCurrencySymbol();
+$customerid =$block->getCustomer()->getCustomerId();
+$helperData = $this->helper('Emipro\Auction\Helper\Data');
+?>
+<?php
+/**
+  *Show my bid content in table.
+*/
+?>
+<?php if($auctionmodel && count($auctionmodel)): ?>
+<table class="ept-mybid-table" >
+	<thead>
+		<th><?php echo __('TITLE'); ?></th>
+		<th><?php echo __('STATUS'); ?></th>
+		<th><?php echo __('YOUR LAST BID'); ?></th>
+		<th><?php echo __('CURRENT BID'); ?></th>
+		<th><?php echo __('AUCTION END DATE'); ?></th>
+		<th><?php echo __('MY BID'); ?></th>
+	</thead>
+	<?php foreach ($auctionmodel as $value):?>
+		<?php $auctionid = $value->getAuctionId();
+		 $lastbidamount = $this->bidFactory->create()->getCollection()->addFieldToFilter('auction_id',$auctionid)->getLastItem()->getBidAmount();
+		 $customerlastbid = $this->bidFactory->create()->getCollection()->addFieldToFilter('auction_id',$auctionid)->addFieldToFilter('customer_id',$customerid)->getLastItem()->getBidAmount();
+		 $winnerid = $block->getWinnerId($auctionid);
+		 $product = $block->getProduct($value->getProductId());
+		 $prourl= $product->getProductUrl();
+		?>
+		<tr>
+			<td><?php echo $value->getTitle(); ?></td>
+			<td><?php if($winnerid):
+
+					if(($winnerid != $customerid) || ($winnerid==null)):
+						echo "<span style='color:red;'><strong>".__("LOST")."</strong></span>";
+
+					else:
+						echo "<span><a style='color:green;' href=".$prourl." target='_blank'><strong>".__("WON (Check out)")."</strong></a></span>";
+					endif;
+				else:
+					echo "<span><a href=".$prourl." target='_blank'>".__("ON GOING (Bid now)")."</span>";
+			 endif;?>
+			</td>
+			<td style="text-align: right;"><?php if($customerlastbid > 0): echo $cursymbol.$helperData->convertPrice($customerlastbid); else: echo __('Not Available'); endif; ?></td>
+			<td style="text-align: right;"><?php if(empty($lastbidamount)){ echo __('Not Available');} else{echo $cursymbol.$helperData->convertPrice($lastbidamount);} ?></td>
+			<td><?php echo date("jS M, Y g:i:s A", strtotime($value->getEndTime())); ?></td>
+			<td><a href="<?php echo $this->getUrl("auction/index/biddetail",array('auction_id' => $auctionid)) ?>">Details</a></td>
+		</tr>
+	<?php endforeach; ?>
+</table>
+	<?php if ($block->getPagerHtml()): ?>
+        <div class="order-products-toolbar toolbar bottom custom-pager"><?php echo $block->getPagerHtml(); ?></div>
+    <?php endif ?>
+<?php else: ?>
+	<div class="message info empty" ><span><?php echo __('You have not placed any bid.'); ?></span></div>
+<?php endif; ?>
